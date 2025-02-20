@@ -6,11 +6,12 @@ import { parser } from "stream-json";
 import { streamArray } from "stream-json/streamers/StreamArray";
 import { logAndRethrow } from "../utils/helpers";
 import { CACHE_FILE } from "../config/config";
+import { Cache } from "./Cache";
 
 /**
  * Service responsible for managing the caching process of author data.
  */
-export class CacheService {
+export class CacheService implements Cache<Map<string, Author>> {
   private static instance: CacheService;
 
   private authorsMap: Map<string, Author> | null = null;
@@ -26,6 +27,10 @@ export class CacheService {
   }
 
   public async getAuthors(): Promise<Map<string, Author>> {
+    return this.load();
+  }
+
+  public async load(): Promise<Map<string, Author>> {
     if (this.authorsMap === null) {
       return await this.load();
     }
@@ -61,7 +66,7 @@ export class CacheService {
     }
   }
 
-  private async load(): Promise<Map<string, Author>> {
+  private async loadFromCache(): Promise<Map<string, Author>> {
     return new Promise((resolve, reject) => {
       const authors: Map<string, Author> = new Map();
 
