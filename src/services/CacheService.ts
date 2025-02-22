@@ -9,7 +9,8 @@ import { CACHE_FILE } from "../config/config";
 import { Cache } from "./Cache";
 
 /**
- * Service responsible for managing the caching process of author data.
+ * Service class responsible for caching author data to and from a file.
+ * @implements {Cache<Map<string, Author>>}
  */
 export class CacheService implements Cache<Map<string, Author>> {
   private static instance: CacheService;
@@ -18,6 +19,10 @@ export class CacheService implements Cache<Map<string, Author>> {
 
   private constructor() {}
 
+  /**
+   * Retrieves the singleton instance of CacheService.
+   * @returns {CacheService} The singleton instance.
+   */
   public static getInstance(): CacheService {
     if (!CacheService.instance) {
       CacheService.instance = new CacheService();
@@ -26,18 +31,31 @@ export class CacheService implements Cache<Map<string, Author>> {
     return CacheService.instance;
   }
 
+  /**
+   * Retrieves the cached authors data.
+   * @returns {Promise<Map<string, Author>>} A promise that resolves to a map of authors.
+   */
   public async getAuthors(): Promise<Map<string, Author>> {
     return this.load();
   }
 
+  /**
+   * Loads authors data from cache if available, otherwise reads from file.
+   * @returns {Promise<Map<string, Author>>} A promise that resolves to a map of authors.
+   */
   public async load(): Promise<Map<string, Author>> {
     if (this.authorsMap === null) {
-      return await this.load();
+      return await this.loadFromCache();
     }
 
     return this.authorsMap!;
   }
 
+  /**
+   * Saves the authors data to the cache file.
+   * @param {Map<string, Author>} authors - The authors data to be saved.
+   * @returns {Promise<Map<string, Author>>} A promise that resolves to the saved map of authors.
+   */
   public async save(
     authors: Map<string, Author>
   ): Promise<Map<string, Author>> {
@@ -66,6 +84,10 @@ export class CacheService implements Cache<Map<string, Author>> {
     }
   }
 
+  /**
+   * Reads and loads authors data from the cache file.
+   * @returns {Promise<Map<string, Author>>} A promise that resolves to a map of authors.
+   */
   private async loadFromCache(): Promise<Map<string, Author>> {
     return new Promise((resolve, reject) => {
       const authors: Map<string, Author> = new Map();
