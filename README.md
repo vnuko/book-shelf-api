@@ -2,7 +2,7 @@
 
 ## Overview
 
-Book Shelf API is a lightweight, file-based backend service written in TypeScript using Express.js. It provides an easy-to-use API that scans a dedicated folder (`data/`) and builds an json response based on the folder structure. This eliminates the need for a database, allowing users to add new authors or books simply by copying files to the server.
+Book Shelf API is a lightweight, file-based backend service written in TypeScript for managing collectios of audio or text books. The service provides an easy-to-use API that scans a dedicated folder (`data/`) and builds an json response based on the folder structure. This eliminates the need for a database, allowing users to add new authors or books simply by copying files to the server.
 
 ## How It Works
 
